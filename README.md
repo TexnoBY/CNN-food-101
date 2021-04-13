@@ -7,19 +7,19 @@
 ## 1)Структура
 Слой сверетки с 8-ю фильтрами и размером ядра свертки 3х3
 
-```
+```python
 x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(inputs)
 ```
 Слой пулинга позволяет уменьшить дискретизацию данных посредством выбора максимального значения в окне 
-```
+```python
 x = tf.keras.layers.MaxPool2D()(x)
 ```
 Flatten приводит матрицу признаков к одномерному вектору 
-```
+```python
 x = tf.keras.layers.Flatten()(x)
 ```
 Полностью связанный слой с 20-ю выходами(NUM_CLASSES=20) и функцией активации softmax, которая приводит вероятностную оценку
-```
+```python
 outputs = tf.keras.layers.Dense(NUM_CLASSES, activation=tf.keras.activations.softmax)(x)
 ```
 ## 2)Графики 
@@ -35,13 +35,13 @@ outputs = tf.keras.layers.Dense(NUM_CLASSES, activation=tf.keras.activations.sof
 
 # 2.Создание и обучение сверточной нейронной сети произвольной архитектуры с количеством сверточных слоев >3
 ## 1)Структура
-```
+```python
  x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(inputs)
  x = tf.keras.layers.MaxPool2D()(x)
  x = tf.keras.layers.Flatten()(x)
 ```
 Увеличил глубину сети 
-```
+```python
   x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(inputs)
   x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(x)
   x = tf.keras.layers.MaxPool2D()(x)
