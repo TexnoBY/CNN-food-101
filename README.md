@@ -1,30 +1,66 @@
-# Food-101 classification example using CNN on tf 2.x + keras
+# Лабораторная работа 1 
 
-The goal of that lab is to create CNN that solves Food-101 Classification task
+В данной лабораторной работе я работал с датасетом Food Images (Food-101)
+в котором 101 класс еды вместе с подклассамы(общий объем 101 тысяча картинок).
+Целью работы было решить задачу классификации
 
-Pre-requisites:
-1. TensorFlow 2.x environment
-
-Steps to reproduce results:
-1. Clone the repository:
-```
-git clone git@github.com:AlexanderSoroka/CNN-food-101.git
-```
-2. Download [Food-101](https://www.kaggle.com/kmader/food41) from kaggle to archive.zip
-- unpack dataset `unzip archive.zip`
-- change current directory to the folder with unpacked dataset
-
-3. Generate TFRecords with build_image_data.py script:
+## 1)Структура
+Слой сверетки с 8-ю фильтрами и размером ядра свертки 3х3
 
 ```
-python build_image_data.py --input <dataset root path> --output <tf output path>
+x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(inputs)
 ```
-
-Validate that total size of generated tfrecord files is close ot original dataset size
-
-4. Run train.py to train pre-defined CNN:
+Слой пулинга позволяет уменьшить дискретизацию данных посредством выбора максимального значения в окне 
 ```
-python train.py --train '<dataset root path>/train*'
+x = tf.keras.layers.MaxPool2D()(x)
 ```
+Flatten приводит матрицу признаков к одномерному вектору 
+```
+x = tf.keras.layers.Flatten()(x)
+```
+Полностью связанный слой с 20-ю выходами(NUM_CLASSES=20) и функцией активации softmax, которая приводит вероятностную оценку
+```
+outputs = tf.keras.layers.Dense(NUM_CLASSES, activation=tf.keras.activations.softmax)(x)
+```
+## 2)Графики 
+![legend](https://user-images.githubusercontent.com/80068414/110239448-f25d1180-7f57-11eb-89d3-f19ba3d1d67a.png)
 
-5. Modify model and have fun
+Метрика качества
+
+![gr1](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_categorical_accuracy%20_1.svg)
+
+
+Функция потерь
+![gr2](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_loss%20_1.svg)
+
+# 2.Создание и обучение сверточной нейронной сети произвольной архитектуры с количеством сверточных слоев >3
+## 1)Структура
+```
+ x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(inputs)
+ x = tf.keras.layers.MaxPool2D()(x)
+ x = tf.keras.layers.Flatten()(x)
+```
+Увеличил глубину сети 
+```
+  x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(inputs)
+  x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(x)
+  x = tf.keras.layers.MaxPool2D()(x)
+  x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(x)
+  x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(x)
+  x = tf.keras.layers.MaxPool2D()(x)
+  x = tf.keras.layers.Flatten()(x)
+```
+## 2)Графики
+![legend](https://user-images.githubusercontent.com/80068414/110239448-f25d1180-7f57-11eb-89d3-f19ba3d1d67a.png)
+
+Метрика качества
+
+![gr3](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_categorical_accuracy_2.svg)
+
+Функция потерь
+
+![gr4](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_loss_2.svg)
+
+# 3.Анализ результатов
+Судя по графикам, приведенным выше, к улучшению результатов увеличение глубины нейронной сети не привело.
+Произвольное добавление слоёв привело к более долгому обучению и большему росту ошибки из-за увеличения глубины.
