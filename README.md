@@ -18,7 +18,7 @@ Flatten приводит матрицу признаков к одномерно
 ```python
 x = tf.keras.layers.Flatten()(x)
 ```
-Полностью связанный слой с 20-ю выходами(NUM_CLASSES=20) и функцией активации softmax, которая приводит вероятностную оценку
+Полностью связанный слой с 101-им выходами(NUM_CLASSES=101)
 ```python
 outputs = tf.keras.layers.Dense(NUM_CLASSES, activation=tf.keras.activations.softmax)(x)
 ```
