@@ -20,8 +20,8 @@ for gpu in gpus:
   tf.config.experimental.set_memory_growth(gpu, True)
 
 
-LOG_DIR = 'logs'
-BATCH_SIZE = 256
+LOG_DIR = 'logs2'
+BATCH_SIZE = 32
 NUM_CLASSES = 101
 RESIZE_TO = 224
 TRAIN_SIZE = 101000
@@ -58,8 +58,8 @@ def create_dataset(filenames, batch_size):
 def build_model():
   inputs = tf.keras.Input(shape=(RESIZE_TO, RESIZE_TO, 3))
   outputs = tf.keras.applications.EfficientNetB0(
-    include_top=True, weights='imagenet', input_tensor=None,
-    input_shape=None, pooling=None, classes=NUM_CLASSES,
+    include_top=True, weights=None,
+    classes=NUM_CLASSES,
     classifier_activation='softmax'
   )(inputs)
   return tf.keras.Model(inputs=inputs, outputs=outputs)
