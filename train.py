@@ -21,7 +21,7 @@ for gpu in gpus:
 
 
 LOG_DIR = 'logs'
-BATCH_SIZE = 256
+BATCH_SIZE = 16
 NUM_CLASSES = 101
 RESIZE_TO = 224
 TRAIN_SIZE = 101000
@@ -57,11 +57,11 @@ def create_dataset(filenames, batch_size):
 
 def build_model():
   inputs = tf.keras.Input(shape=(RESIZE_TO, RESIZE_TO, 3))
-  x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(inputs)
-  x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(x)
+  x = tf.keras.layers.Conv2D(filters=128, kernel_size=3)(inputs)
+  x = tf.keras.layers.Conv2D(filters=64, kernel_size=3)(x)
   x = tf.keras.layers.MaxPool2D()(x)
-  x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(x)
-  x = tf.keras.layers.Conv2D(filters=8, kernel_size=3)(x)
+  x = tf.keras.layers.Conv2D(filters=32, kernel_size=3)(x)
+  x = tf.keras.layers.Conv2D(filters=16, kernel_size=3)(x)
   x = tf.keras.layers.MaxPool2D()(x)
   x = tf.keras.layers.Flatten()(x)
   outputs = tf.keras.layers.Dense(NUM_CLASSES, activation=tf.keras.activations.softmax)(x)
