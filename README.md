@@ -2,7 +2,7 @@
 # Решение задачи классификации изображений из набора данных Food-101 с использованием нейронных сетей глубокого обучения и техники обучения Transfer Learning
 
 
-##EfficientNet
+## EfficientNet
 train.py
 ```python
 inputs = tf.keras.Input(shape=(RESIZE_TO, RESIZE_TO, 3))
@@ -24,7 +24,7 @@ return tf.keras.Model(inputs=inputs, outputs=outputs)
 Функция потерь
 ![gr2](https://github.com/TexnoBY/CNN-food-101/blob/lab2/graphics/lab2/epoch_loss.svg)
 
-##EfficientNet с Transfer learning
+## EfficientNet с Transfer learning
 
 train_transfer.py
 ```python
@@ -42,7 +42,7 @@ return tf.keras.Model(inputs=inputs, outputs=outputs)
 
 Метрика качества
 
-![gr1](https://github.com/TexnoBY/CNN-food-101/blob/lab2/graphics/lab2/transfer_epoch_categorical_accuracy.svg)
+![gr1](https://github.com/TexnoBY/CNN-food-101/blob/lab2/graphics/lab2/tranfer_epoch_categorical_accuracy.svg)
 
 
 Функция потерь
@@ -50,7 +50,7 @@ return tf.keras.Model(inputs=inputs, outputs=outputs)
 
 ## Вывод
 Первая попытка обучения была неудовлетворительной, максимальная достигнутая точность около 30%.
-Во второй раз при использовании Transfer learning произошло значительное улучшение результатов,
+Во второй раз при использовании Transfer learning произошло значительное улучшение результатов(около 70% на тренировочной и 52% на тестовой выборках),
 но также появилось явное переобучение сети. При использовании Transfer learning сеть обучалась в разы быстрее.
 По моим размышлениям в первом случае не хватает данных для лучшего обучения(в imagenet dataset 14млн картинок),
 поэтому надо провести аугментацию данных. 
