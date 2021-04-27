@@ -3,7 +3,7 @@
 
 ## Learning rate
 
-### Графики
+#### Графики
 Использовал фиксированный темп обучения 0.01, 0.001, 0.0001 <br/>
 ![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/ADAM.jpg)
 
@@ -20,20 +20,41 @@
 
 ## Cosine Decay и Cosine Decay with Restarts
 
-### Графики
+### Cosine Decay
 
-![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/cos.jpg)
+Из-за долгого обучения сети и ограниченного времени было проведено обучения
+на фиксированном темпе обучения lr = 0.0001, менял лишь decay_steps = [1000, 100, 10]
+
+#### Графики
+
+![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/cos_decay.jpg)
 
 Метрика качества
 
-![gr3](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/epoch_categorical_accuracy_cos.svg)
+![gr3](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/epoch_categorical_accuracy_cos_decay.svg)
 
 
 Функция потерь
 
-![gr4](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/epoch_loss_cos.svg)
+![gr4](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/epoch_loss_cos_decay.svg)
+
+### Cosine Decay with Restarts
+
+Тут тоже проводил обучение на фиксированном темпе обучения lr = 0.0001, менял лишь <,>br/>
+decay_steps = [1000, 100, 10]
+
+#### Графики
+
+![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/cos_decay_restarts.jpg)
+
+Метрика качества
+
+![gr3](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/epoch_categorical_accuracy_cos_decay_restarts.svg)
 
 
+Функция потерь
+
+![gr4](https://github.com/TexnoBY/CNN-food-101/blob/lab3/graphics/lab3/epoch_loss_cos_decay_restarts.svg)
 ## Вывод
 
 При использовании фиксированного темпа обучения
