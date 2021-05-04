@@ -35,16 +35,16 @@ def build_model(mode):
 
 ### Графики
 
-![legend](https://user-images.githubusercontent.com/80068414/110239448-f25d1180-7f57-11eb-89d3-f19ba3d1d67a.png)
+![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/flip/flip.jpg)
 
 Метрика качества
 
-![gr1](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_categorical_accuracy%20_1.svg)
+![gr1](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/flip/epoch_categorical_accuracy_flip.svg)
 
 
 Функция потерь
 
-![gr2](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_loss%20_1.svg)
+![gr2](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/flip/epoch_loss_flip.svg)
 
 
 ## Использование случайной части изображения
@@ -66,21 +66,22 @@ def build_model(mode):
 
 ### Графики
 
-![legend](https://user-images.githubusercontent.com/80068414/110239448-f25d1180-7f57-11eb-89d3-f19ba3d1d67a.png)
+![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/crop/crop.jpg)
 
 Метрика качества
 
-![gr3](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_categorical_accuracy%20_1.svg)
+![gr3](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/crop/epoch_categorical_accuracy_crop.svg)
 
 
 Функция потерь
 
-![gr4](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_loss%20_1.svg)
+![gr4](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/crop/epoch_loss_crop.svg)
 
 ## Поворот на случайный угол
 
 ### Структура 
 mode = [0.1, 0.3, 0.5, 0.7, 0.9]
+method = ['wrap, 'reflect, 'constant']
 ```python
 def build_model(mode):
   inputs = tf.keras.Input(shape=(RESIZE_TO, RESIZE_TO, 3))
@@ -94,18 +95,30 @@ def build_model(mode):
   return tf.keras.Model(inputs=inputs, outputs=outputs)
 ```
 
-### Графики
+### Графики wrap
 
-![legend](https://user-images.githubusercontent.com/80068414/110239448-f25d1180-7f57-11eb-89d3-f19ba3d1d67a.png)
+![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/rotate/wrap/wrap.jpg)
 
 Метрика качества
 
-![gr5](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_categorical_accuracy%20_1.svg)
+![gr5](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/rotate/wrap/epoch_categorical_accuracy_wrap.svg)
 
+### Графики reflect
 
-Функция потерь
+![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/rotate/reflect/reflect.jpg)
 
-![gr6](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_loss%20_1.svg)
+Метрика качества
+
+![gr5](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/rotate/reflect/epoch_categorical_accuracy_reflect.svg)
+
+### Графики constant
+
+![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/rotate/constant/constant.jpg)
+
+Метрика качества
+
+![gr5](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/rotate/constant/epoch_categorical_accuracy_constant.svg)
+
 
 
 
@@ -134,12 +147,12 @@ def build_model(mode):
 
 Метрика качества
 
-![gr7](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_categorical_accuracy%20_1.svg)
+![gr7](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/all/epoch_categorical_accuracy%20(2).svg)
 
 
 Функция потерь
 
-![gr8](https://github.com/TexnoBY/CNN-food-101/blob/master/graphics/epoch_loss%20_1.svg)
+![gr8](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/all/epoch_loss%20(1).svg)
 
 
 
