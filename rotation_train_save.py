@@ -10,9 +10,11 @@ import argparse
 import glob
 import numpy as np
 import tensorflow as tf
+import tensorflow_addons as tfa
 import time
 from tensorflow.python import keras as keras
 from tensorflow.python.keras.callbacks import LearningRateScheduler
+from PIL import Image
 
 # Avoid greedy memory allocation to allow shared GPU usage
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -36,6 +38,7 @@ def parse_proto_example(proto):
   example['image'] = tf.image.decode_jpeg(example['image/encoded'], channels=3)
   example['image'] = tf.image.convert_image_dtype(example['image'], dtype=tf.uint8)
   example['image'] = tf.image.resize(example['image'], tf.constant([RESIZE_TO, RESIZE_TO]), method='nearest')
+  example['image'] = tfa.image.rotate(example['image'], 0.4, fill_mode = 'reflect', fill_value = 0)
   return example['image'], tf.one_hot(example['image/label'], depth=NUM_CLASSES)
 
 
@@ -57,9 +60,7 @@ def create_dataset(filenames, batch_size):
 
 def build_model(mode):
   inputs = tf.keras.Input(shape=(RESIZE_TO, RESIZE_TO, 3))
-  aug_data = tf.keras.layers.experimental.preprocessing.RandomFlip(mode=mode,
-                                                                   seed=None,
-                                                                   name=None)(inputs)
+  aug_data = tf.keras.layers.experimental.preprocessing.RandomRotation(mode, fill_mode='constant', fill_value=255)(inputs)
   x = tf.keras.applications.EfficientNetB0(include_top=False,
                                            weights='imagenet',
                                            input_tensor=aug_data)
@@ -75,32 +76,14 @@ def main():
   args = args.parse_args()
 
   dataset = create_dataset(glob.glob(args.train), BATCH_SIZE)
-  # for x, y in dataset.take(1):
-  #      print(x)
-  train_size = int(TRAIN_SIZE * 0.7 / BATCH_SIZE)
-  train_dataset = dataset.take(train_size)
-  validation_dataset = dataset.skip(train_size)
+  q = 0
+  for x, y in dataset.take(40):
+    for j in x:
 
-  for mode in ["horizontal", "vertical", "horizontal_and_vertical"]:
-
-      model = build_model(mode)
-
-      model.compile(
-        optimizer=tf.optimizers.Adam(lr=0.0001),
-        loss=tf.keras.losses.categorical_crossentropy,
-        metrics=[tf.keras.metrics.categorical_accuracy],
-      )
-
-      log_dir='{}/augmentation_{}-{}'.format(LOG_DIR, mode, time.time())
-      model.fit(
-        train_dataset,
-        epochs=25,
-        validation_data=validation_dataset,
-        callbacks=[
-          tf.keras.callbacks.TensorBoard(log_dir),
-        ]
-      )
-
+      q += 1
+      img = Image.fromarray(j.numpy(), 'RGB')
+      img.save(f'rotate-{q}.jpg')
+      break
 
 if __name__ == '__main__':
     main()

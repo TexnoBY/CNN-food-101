@@ -12,7 +12,11 @@ import numpy as np
 import tensorflow as tf
 import time
 from tensorflow.python import keras as keras
+import tensorflow_addons as tfa
 from tensorflow.python.keras.callbacks import LearningRateScheduler
+
+from PIL import Image
+
 
 # Avoid greedy memory allocation to allow shared GPU usage
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -35,9 +39,11 @@ def parse_proto_example(proto):
   example = tf.io.parse_single_example(proto, keys_to_features)
   example['image'] = tf.image.decode_jpeg(example['image/encoded'], channels=3)
   example['image'] = tf.image.convert_image_dtype(example['image'], dtype=tf.uint8)
-  example['image'] = tf.image.resize(example['image'], tf.constant([RESIZE_TO, RESIZE_TO]), method='nearest')
+  example['image'] = tf.image.resize(example['image'], tf.constant([250, 250]), method='nearest')
+  example['image'] = tf.image.random_crop(example['image'],[RESIZE_TO, RESIZE_TO, 3])
+  example['image'] = tf.image.flip_left_right(example['image'])
+  example['image'] = tfa.image.rotate(example['image'], 0.4, fill_mode = 'reflect', fill_value = 0)
   return example['image'], tf.one_hot(example['image/label'], depth=NUM_CLASSES)
-
 
 def normalize(image, label):
   return tf.image.per_image_standardization(image), label
@@ -54,53 +60,20 @@ def create_dataset(filenames, batch_size):
     .batch(batch_size)\
     .prefetch(tf.data.AUTOTUNE)
 
-
-def build_model(mode):
-  inputs = tf.keras.Input(shape=(RESIZE_TO, RESIZE_TO, 3))
-  aug_data = tf.keras.layers.experimental.preprocessing.RandomFlip(mode=mode,
-                                                                   seed=None,
-                                                                   name=None)(inputs)
-  x = tf.keras.applications.EfficientNetB0(include_top=False,
-                                           weights='imagenet',
-                                           input_tensor=aug_data)
-  x.trainable = False
-  x = tf.keras.layers.GlobalAveragePooling2D()(x.output)
-  outputs = tf.keras.layers.Dense(NUM_CLASSES, activation=tf.keras.activations.softmax)(x)
-  return tf.keras.Model(inputs=inputs, outputs=outputs)
-
-
 def main():
   args = argparse.ArgumentParser()
   args.add_argument('--train', type=str, help='Glob pattern to collect train tfrecord files, use single quote to escape *')
   args = args.parse_args()
 
   dataset = create_dataset(glob.glob(args.train), BATCH_SIZE)
-  # for x, y in dataset.take(1):
-  #      print(x)
-  train_size = int(TRAIN_SIZE * 0.7 / BATCH_SIZE)
-  train_dataset = dataset.take(train_size)
-  validation_dataset = dataset.skip(train_size)
+  q = 0
+  for x, y in dataset.take(40):
+    for j in x:
 
-  for mode in ["horizontal", "vertical", "horizontal_and_vertical"]:
-
-      model = build_model(mode)
-
-      model.compile(
-        optimizer=tf.optimizers.Adam(lr=0.0001),
-        loss=tf.keras.losses.categorical_crossentropy,
-        metrics=[tf.keras.metrics.categorical_accuracy],
-      )
-
-      log_dir='{}/augmentation_{}-{}'.format(LOG_DIR, mode, time.time())
-      model.fit(
-        train_dataset,
-        epochs=25,
-        validation_data=validation_dataset,
-        callbacks=[
-          tf.keras.callbacks.TensorBoard(log_dir),
-        ]
-      )
-
+      q += 1
+      img = Image.fromarray(j.numpy(), 'RGB')
+      img.save(f'all-{q}.jpg')
+      break
 
 if __name__ == '__main__':
     main()

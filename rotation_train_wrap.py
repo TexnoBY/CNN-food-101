@@ -57,9 +57,7 @@ def create_dataset(filenames, batch_size):
 
 def build_model(mode):
   inputs = tf.keras.Input(shape=(RESIZE_TO, RESIZE_TO, 3))
-  aug_data = tf.keras.layers.experimental.preprocessing.RandomFlip(mode=mode,
-                                                                   seed=None,
-                                                                   name=None)(inputs)
+  aug_data = tf.keras.layers.experimental.preprocessing.RandomRotation(mode, fill_mode='wrap')(inputs)
   x = tf.keras.applications.EfficientNetB0(include_top=False,
                                            weights='imagenet',
                                            input_tensor=aug_data)
@@ -81,7 +79,7 @@ def main():
   train_dataset = dataset.take(train_size)
   validation_dataset = dataset.skip(train_size)
 
-  for mode in ["horizontal", "vertical", "horizontal_and_vertical"]:
+  for mode in [0.1, 0.3, 0.5, 0.7, 0.9]:
 
       model = build_model(mode)
 
@@ -91,10 +89,10 @@ def main():
         metrics=[tf.keras.metrics.categorical_accuracy],
       )
 
-      log_dir='{}/augmentation_{}-{}'.format(LOG_DIR, mode, time.time())
+      log_dir='{}/augmentation_rotate-wrap_{}-{}'.format(LOG_DIR, mode, time.time())
       model.fit(
         train_dataset,
-        epochs=25,
+        epochs=15,
         validation_data=validation_dataset,
         callbacks=[
           tf.keras.callbacks.TensorBoard(log_dir),
