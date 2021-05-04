@@ -57,9 +57,7 @@ def create_dataset(filenames, batch_size):
 
 def build_model(mode):
   inputs = tf.keras.Input(shape=(RESIZE_TO, RESIZE_TO, 3))
-  aug_data = tf.keras.layers.experimental.preprocessing.RandomFlip(mode=mode,
-                                                                   seed=None,
-                                                                   name=None)(inputs)
+  aug_data = tf.keras.layers.experimental.preprocessing.RandomFlip(mode=mode)(inputs)
   x = tf.keras.applications.EfficientNetB0(include_top=False,
                                            weights='imagenet',
                                            input_tensor=aug_data)

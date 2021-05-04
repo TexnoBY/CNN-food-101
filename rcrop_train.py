@@ -42,9 +42,6 @@ def parse_proto_example(proto):
 def normalize(image, label):
   return tf.image.per_image_standardization(image), label
 
-def random_crop(image,label):
-      return tf.image.random_crop(image,[RESIZE_TO, RESIZE_TO, 3]),label
-
 def create_dataset(filenames, batch_size):
   """Create dataset from tfrecords file
   :tfrecords_files: Mask to collect tfrecords file of dataset
