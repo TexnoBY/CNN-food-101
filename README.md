@@ -32,7 +32,7 @@ def build_model(mode):
   outputs = tf.keras.layers.Dense(NUM_CLASSES, activation=tf.keras.activations.softmax)(x)
   return tf.keras.Model(inputs=inputs, outputs=outputs)
 ```
-
+Лучшим Методом оказался "horizontal"
 ### Графики
 
 ![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/flip/flip.jpg)
@@ -94,7 +94,7 @@ def build_model(mode):
   outputs = tf.keras.layers.Dense(NUM_CLASSES, activation=tf.keras.activations.softmax)(x)
   return tf.keras.Model(inputs=inputs, outputs=outputs)
 ```
-
+Лучшей комбинацией оказались angle=0.1, method = 'reflect'
 ### Графики wrap
 
 ![legend](https://github.com/TexnoBY/CNN-food-101/blob/lab4/graphs/rotate/wrap/wrap.jpg)
@@ -157,4 +157,5 @@ def build_model(mode):
 
 
 ## Вывод
+
 
